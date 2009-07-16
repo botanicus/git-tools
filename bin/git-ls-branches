@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Show unformatted list of local, remote or both type of branches.
+#
+# === Usage ===
+# git ls-branches
+# git ls-branches -r
+# git ls-branches -a
+
+git branch $* | sed -E 's/^\*? +//'
