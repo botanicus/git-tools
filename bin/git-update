@@ -21,9 +21,11 @@ fi
 git fetch
 
 for branch in $(git ls-branches) ; do
-  run git checkout $branch
-  # TODO: rework to use tracking branches
-  git rebase origin/$branch || exit 1
+  if [[ $branch != "integration" ]]; then
+    run git checkout $branch
+    # TODO: rework to use tracking branches
+    git rebase origin/$branch || exit 1
+  fi
 done
 
 run git checkout $original
