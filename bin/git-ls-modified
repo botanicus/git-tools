@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Show unformatted list of modified files.
+#
+# === Usage ===
+# git ls-modified
+
+git status | egrep '^#.+modified:' | awk '{ print $3 }'
