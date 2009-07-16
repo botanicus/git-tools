@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Update all local branches from remote repositories.
+#
+# === Usage ===
+# git update
+
+# functions
+run() {
+  echo -e "\e[1;32m$*\e[0m" && $*
+}
+
+# variables
+original=$(git current-branch)
+
+if ! git working-directory-clean ; then
+  echo "Working directory has to be clean before updating"
+  exit 1
+fi
+
+git fetch
+
+for branch in $(git ls-branches) ; do
+  run git checkout $branch
+  # TODO: rework to use tracking branches
+  git rebase origin/$branch || exit 1
+done
+
+run git checkout $original
