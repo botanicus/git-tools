@@ -1,0 +1,7 @@
+h1. About
+
+Git-tools is collection of shell scripts for easier work with Git.
+
+h1. Usage
+
+Just add @git-tools/bin@ to $PATH and use as any other git commands: @git current-branch@ and so.
