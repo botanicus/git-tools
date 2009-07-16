@@ -3,29 +3,46 @@
 # Update all local branches from remote repositories.
 #
 # === Usage ===
-# git update
+# git update -a # all branches
+# git update    # current branch
+# git update master
 
 # functions
 run() {
   echo -e "\e[1;32m$*\e[0m" && $*
 }
 
+function switch() {
+  if [[ $(git current-branch) != $1 ]]; then
+    run git checkout $1
+  fi
+}
+
 # variables
 original=$(git current-branch)
+
+if [[ $1 = "-a" ]] ; then
+  collection=$(git ls-branches)
+elif [[ $1 = "" ]] ; then
+  collection=$(git current-branch)
+else
+  collection=$*
+fi
 
 if ! git working-directory-clean ; then
   echo "Working directory has to be clean before updating"
   exit 1
 fi
 
-git fetch
+run git fetch
 
-for branch in $(git ls-branches) ; do
+for branch in $collection ; do
   if [[ $branch != "integration" ]]; then
-    run git checkout $branch
+    switch $branch
     # TODO: rework to use tracking branches
+    # TODO: just if tracking branch already exist
     git rebase origin/$branch || exit 1
   fi
 done
 
-run git checkout $original
+switch $original
