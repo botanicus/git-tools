@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# Returns 0 if working directory is clean, otherwise returns 1.
+#
+# === Usage ===
+# git working-directory-clean
+
+exit(%x{git status}.match("nothing to commit") ? 0 : 1)
