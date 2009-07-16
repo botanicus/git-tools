@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Print name of current branch.
+#
+# === Usage ===
+# git current-branch
+
+git branch $* | grep '^*' | sed 's/^* //'
