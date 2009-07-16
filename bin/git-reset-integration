@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Reset integration to the given or current branch.
+#
+# === Usage ===
+# git reset-integration
+# git reset-integration master
+
+# functions
+run() {
+  echo -e "\e[1;32m$*\e[0m" && $*
+}
+
+# variables
+original=$(git current-branch)
+(test "$1" = "") && branch=$original || branch=$1
+
+# main
+run git checkout integration
+run git reset $branch --hard
+run git push -f origin integration
+run git checkout $original
