@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# TODO: reset to HEAD on C-c
+# TODO: quiet option for not show output of the command
+
+# git biset-by-command [revision] [command]
+# git biset-by-command 23jsd80232 "spec spec/models/user_spec.rb"
+start=$1
+command=$2
+function success() {
+  echo -e "\e[1;32m$*\e[0m"
+}
+
+function error() {
+  echo -e "\e[1;31m$*\e[0m"
+}
+
+function revision() {
+  git log -1 --raw | egrep '^commit ' | awk '{ print $2 }'
+}
+
+function run() {
+  if $command; then
+    success "Revision $(revision) is good"
+    git bisect good || exit
+  else
+    error "Revision $(revision) is bad"
+    git bisect bad || exit
+  fi
+}
+
+function run_all() {
+  start_revision=$(revision)
+  run
+  if [[ $start_revision != $(revision) ]]; then
+    run_all
+  fi 
+}
+
+# main
+git bisect start
+git bisect good $start
+git bisect bad HEAD
+run_all
