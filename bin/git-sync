@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Sync all local branches with master
+#
+# === Usage ===
+# git sync
+
+# functions
+run() {
+  echo -e "\e[1;32m$*\e[0m" && $*
+}
+
+function switch() {
+  if [[ $(git current-branch) != "$1" ]]; then
+    run git checkout $1
+  fi
+}
+
+# variables
+original=$(git current-branch)
+collection=$(git ls-branches)
+
+if ! git working-directory-clean ; then
+  echo "Working directory has to be clean before updating"
+  exit 1
+fi
+
+for branch in $collection ; do
+  if [[ $branch != "integration" ]]; then
+    switch $branch
+    git rebase master || (git rebase --abort && exit 1)
+  fi
+done
+
+switch $original
