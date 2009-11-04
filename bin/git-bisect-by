@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# !!! PROBABLY NEARLY THE SAME AS git bisect run, check it
+
 # TODO: reset to HEAD on C-c
 # TODO: quiet option for not show output of the command
 

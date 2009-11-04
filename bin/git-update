@@ -41,7 +41,7 @@ for branch in $collection ; do
     switch $branch
     # TODO: rework to use tracking branches
     # TODO: just if tracking branch already exist
-    git rebase origin/$branch || exit 1
+    git rebase origin/$branch || (git rebase --abort && exit 1)
   fi
 done
 
