@@ -6,6 +6,14 @@
 # git reset-integration
 # git reset-integration master
 
+# refuse to reset integration if doing so will clobber uncommitted changes
+diff_output=`git diff --name-only --exit-code HEAD`
+if [ $? -eq 1  ]; then
+  echo "cannot reset integration: you have uncommitted changes..."
+  echo $diff_output
+  exit 1
+fi
+
 # functions
 run() {
   echo -e "\e[1;32m$*\e[0m" && $*
